@@ -1,0 +1,30 @@
+# Sentence-initial connectives ("however", "moreover", "because", ...).
+# If a chosen sentence begins with one of these, the preceding sentence
+# is also included in the summary (Section 3.4 of the paper).
+लेकिन
+परंतु
+परन्तु
+किंतु
+किन्तु
+हालांकि
+हालाँकि
+मगर
+इसके अलावा
+इसके अतिरिक्त
+इसके बावजूद
+इसके साथ ही
+साथ ही
+क्योंकि
+चूंकि
+चूँकि
+इसलिए
+अतः
+फिर भी
+बल्कि
+यानी
+यानि
+अर्थात
+वहीं
+दूसरी ओर
+वैसे
+हालांकि,

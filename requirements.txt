@@ -1,0 +1,8 @@
+gensim>=4.0
+scikit-learn>=1.0
+numpy
+
+# optional
+# indic-nlp-library
+# stanza
+# datasets

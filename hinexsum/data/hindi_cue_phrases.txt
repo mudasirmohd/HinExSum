@@ -1,0 +1,20 @@
+# Cue phrases: presence anywhere in a sentence raises its rank
+# (equivalents of "in summary", "in conclusion", "importantly", ...)
+संक्षेप में
+निष्कर्ष में
+निष्कर्षतः
+सारांश में
+अंत में
+अंततः
+कुल मिलाकर
+महत्वपूर्ण बात
+मुख्य रूप से
+विशेष रूप से
+गौरतलब है
+उल्लेखनीय है
+ध्यान देने योग्य
+परिणामस्वरूप
+नतीजतन
+इस प्रकार
+अतः
+इसलिए

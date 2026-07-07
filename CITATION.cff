@@ -1,0 +1,45 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using the metadata below, and also cite the underlying method paper listed under 'references'."
+title: "HinExSum: A Hindi extractive summariser using distributional semantics"
+abstract: >-
+  HinExSum is an open reference implementation, adapted to Hindi (Devanagari),
+  of the word-embedding extractive summarisation method of Mohd, Jan and Shah
+  (2020). It provides the full pipeline (preprocessing, big-vector generation,
+  k-means clustering, seven-feature ranking, redundancy and connective rules),
+  a standalone Devanagari-safe ROUGE module, and a bootstrap evaluation harness
+  for the XL-Sum and ILSUM corpora.
+type: software
+authors:
+  - family-names: Mohd
+    given-names: Mudasir
+    name-particle: Dr.
+version: 1.0.0
+# Update date-released to the actual tag date when releasing (see RELEASE.md).
+date-released: "2026-07-07"
+license: MIT
+keywords:
+  - extractive summarization
+  - Hindi
+  - Devanagari
+  - word embeddings
+  - k-means
+  - ROUGE
+  - low-resource NLP
+# Placeholders — fill in at release (see RELEASE.md):
+repository-code: "https://github.com/mudasirmohd/HinExSum"
+# doi: 10.5281/zenodo.XXXXXXX   # Zenodo concept DOI, added after archiving
+references:
+  - type: article
+    title: "Text document summarization using word embedding"
+    authors:
+      - family-names: Mohd
+        given-names: Mudasir
+      - family-names: Jan
+        given-names: Rafiya
+      - family-names: Shah
+        given-names: Muzaffar
+    journal: "Expert Systems with Applications"
+    volume: 143
+    year: 2020
+    doi: "10.1016/j.eswa.2019.112958"
+    notes: "Article number 112958. This is the method that HinExSum reimplements and adapts to Hindi."
