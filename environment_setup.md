@@ -54,8 +54,8 @@ pip install -e ".[test]"    # + pytest
   you must also download the Hindi model once: `python -c "import stanza;
   stanza.download('hi')"`.
 - **`datasets==2.21.0`** — Only to *download* the full XL-Sum / ILSUM corpora.
-  The capsule ships a 10-document sample (`data/xlsum_hindi_sample.jsonl`), so
-  `datasets` is not needed for the default run.
+  The capsule ships a 10-document sample (`code/data/xlsum_hindi_sample.jsonl`),
+  so `datasets` is not needed for the default run.
 
 ## Data assets
 
@@ -67,6 +67,7 @@ pip install -e ".[test]"    # + pytest
 
 ## Entrypoint
 
-Set the capsule's run command to `run` (or `bash run`). It writes `pytest.txt`,
-`demo_summary.txt` and `evaluate_sample.md` to `/results`. Paths are overridable
-via `MODEL_PATH`, `SAMPLE_DATA`, `RESULTS_DIR` and `PYTHON` environment variables.
+Set the capsule's run command to `code/run` (or `bash code/run`). It writes
+`pytest.txt`, `demo_summary.txt` and `evaluate_sample.md` to `/results`. Paths are
+overridable via `MODEL_PATH`, `SAMPLE_DATA`, `RESULTS_DIR` and `PYTHON` environment
+variables.

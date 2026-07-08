@@ -51,11 +51,11 @@ result = summarizer.summarize(hindi_text, ratio=0.25)
 print(result.summary)
 ```
 
-Command line:
+Command line (scripts live under `code/`):
 
 ```bash
-python demo.py --model cc.hi.300.bin article.txt --ratio 0.25
-python demo.py --toy --no-pos                # quick smoke test, trains tiny vectors on the input (testing only)
+python code/demo.py --model cc.hi.300.bin article.txt --ratio 0.25
+python code/demo.py --toy --no-pos           # quick smoke test, trains tiny vectors on the input (testing only)
 ```
 
 ## Evaluation (XL-Sum / ILSUM Hindi)
@@ -66,10 +66,10 @@ from datasets import load_dataset
 load_dataset("csebuetnlp/xlsum", "hindi", split="test").to_json("xlsum_hindi_test.jsonl")
 PY
 
-python evaluate_xlsum.py --model cc.hi.300.bin --data xlsum_hindi_test.jsonl --limit 200
+python code/evaluate_xlsum.py --model cc.hi.300.bin --data xlsum_hindi_test.jsonl --limit 200
 ```
 
-`evaluate_xlsum.py` reports Pr/Rc/Fs for ROUGE-1/2/L/SU4 and supports fixed-budget
+`code/evaluate_xlsum.py` reports Pr/Rc/Fs for ROUGE-1/2/L/SU4 and supports fixed-budget
 extraction (`--fixed --max-sentences N`), baseline comparison
 (`--baselines`), feature/selection ablations (`--ablation`, `--features`,
 `--selection`, `--weights`), and validation-tuned evaluation (`--tune`), all with
@@ -81,24 +81,34 @@ directly.
 
 ```bash
 pip install -e ".[test]"
-pytest
+pytest code            # or: cd code && pytest
 ```
 
-## Repository layout
+## Repository layout (Code Ocean capsule)
 
 ```
-hinexsum/
-  preprocessing.py   # NFC normalisation, danda splitting, stopwords, stemmer
-  embeddings.py      # embedding loading + big-vector generation (§3.2)
-  ranking.py         # 7 ranking features (§3.4), Stanza POS optional
-  summarizer.py      # clustering + selection + redundancy + coherence rule (§3.3–3.4)
-  rouge.py           # Devanagari-safe ROUGE-1/2/L/SU4
-  data/              # Hindi stopwords, cue phrases, connectives
-demo.py              # summarise a file or the built-in sample
-evaluate_xlsum.py    # evaluation harness (baselines, ablations, tuning, bootstrap)
-run_ilsum.py         # ILSUM (FIRE) Hindi evaluation
-tests/               # pytest unit tests
+README.md  LICENSE  CITATION.cff        # project root
+pyproject.toml  requirements.txt  environment_setup.md  RELEASE.md
+code/                                   # -> /code in the capsule
+  run                # executable entrypoint: pytest + demo + sample evaluation -> /results
+  hinexsum/
+    preprocessing.py # NFC normalisation, danda splitting, stopwords, stemmer
+    embeddings.py    # embedding loading + big-vector generation (§3.2)
+    ranking.py       # 7 ranking features (§3.4), Stanza POS optional
+    summarizer.py    # clustering + selection + redundancy + coherence rule (§3.3–3.4)
+    rouge.py         # Devanagari-safe ROUGE-1/2/L/SU4
+    data/            # Hindi stopwords, cue phrases, connectives
+  demo.py            # summarise a file or the built-in sample
+  evaluate_xlsum.py  # evaluation harness (baselines, ablations, tuning, bootstrap)
+  run_ilsum.py       # ILSUM (FIRE) Hindi evaluation
+  tests/             # pytest unit tests
+  data/
+    xlsum_hindi_sample.jsonl   # 10-doc sample for the entrypoint (CC BY-NC-SA; see data/README.md)
 ```
+
+In a Code Ocean capsule the embedding model is provided as a data asset at
+`/data/cc.hi.300.bin`, and the entrypoint writes its outputs to `/results`.
+Run it with `code/run` (see `environment_setup.md` for the pinned environment).
 
 ## Key hyperparameters
 

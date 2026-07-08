@@ -29,6 +29,7 @@ Homepage = "https://github.com/mudasirmohd/HinExSum"
 
 [tool.setuptools]
 packages = ["hinexsum"]
+package-dir = { "" = "code" }   # package lives under code/ (Code Ocean layout)
 
 [tool.setuptools.package-data]
 hinexsum = ["data/*.txt"]
