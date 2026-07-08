@@ -19,3 +19,9 @@ stanza_resources/
 # unpublished manuscript drafts (kept out of the public repo)
 osp_draft.md
 postmortem_draft.md
+
+# capsule run outputs (local scratch; the capsule writes to /results)
+results/
+
+# bundle the small sample corpus with the code (overrides *.jsonl above)
+!data/xlsum_hindi_sample.jsonl

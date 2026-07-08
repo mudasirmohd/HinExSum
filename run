@@ -1,0 +1,100 @@
+#!/usr/bin/env bash
+#
+# Code Ocean capsule entrypoint for HinExSum.
+#
+# Runs three steps and writes every output to $RESULTS_DIR:
+#   [1/3] the pytest unit-test suite
+#   [2/3] a demo summary of the built-in article with the real embedding model
+#   [3/3] evaluate_xlsum.py with baselines at 3 sentences on the bundled
+#         10-document XL-Sum sample (data/xlsum_hindi_sample.jsonl)
+#
+# Configuration via environment variables (defaults work both locally and in a
+# Code Ocean capsule, where data assets mount under /data and results go to
+# /results):
+#   MODEL_PATH   fastText Hindi model. Default: first existing of
+#                /data/cc.hi.300.bin, ./cc.hi.300.bin, ./data/cc.hi.300.bin
+#   SAMPLE_DATA  bundled evaluation corpus. Default: ./data/xlsum_hindi_sample.jsonl
+#   RESULTS_DIR  output directory. Default: /results (falls back to ./results)
+#   PYTHON       python interpreter. Default: python3
+#
+set -uo pipefail
+
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$HERE"
+
+PYTHON="${PYTHON:-python3}"
+SAMPLE_DATA="${SAMPLE_DATA:-$HERE/data/xlsum_hindi_sample.jsonl}"
+
+# Results directory: prefer /results (Code Ocean); fall back to ./results locally.
+RESULTS_DIR="${RESULTS_DIR:-/results}"
+if ! mkdir -p "$RESULTS_DIR" 2>/dev/null; then
+    RESULTS_DIR="$HERE/results"
+    mkdir -p "$RESULTS_DIR"
+fi
+
+# Model: honour MODEL_PATH if set, else search the usual mount/local locations.
+if [ -z "${MODEL_PATH:-}" ]; then
+    for cand in /data/cc.hi.300.bin "$HERE/cc.hi.300.bin" "$HERE/data/cc.hi.300.bin"; do
+        if [ -f "$cand" ]; then MODEL_PATH="$cand"; break; fi
+    done
+fi
+MODEL_PATH="${MODEL_PATH:-}"
+
+echo "=========================================================="
+echo " HinExSum capsule run"
+echo "   PYTHON      = $PYTHON"
+echo "   MODEL_PATH  = ${MODEL_PATH:-<none found>}"
+echo "   SAMPLE_DATA = $SAMPLE_DATA"
+echo "   RESULTS_DIR = $RESULTS_DIR"
+echo "=========================================================="
+echo
+
+status=0
+
+# ---- [1/3] tests ----------------------------------------------------------
+echo "== [1/3] pytest =="
+if "$PYTHON" -m pytest -q 2>&1 | tee "$RESULTS_DIR/pytest.txt"; then
+    echo "tests: PASS"
+else
+    echo "tests: FAILURES (see $RESULTS_DIR/pytest.txt)"
+    status=1
+fi
+echo
+
+# ---- [2/3] demo summary with the real model -------------------------------
+echo "== [2/3] demo summary =="
+if [ -n "$MODEL_PATH" ] && [ -f "$MODEL_PATH" ]; then
+    "$PYTHON" demo.py --model "$MODEL_PATH" --no-pos 2>&1 \
+        | tee "$RESULTS_DIR/demo_summary.txt"
+else
+    echo "MODEL_PATH not found — attach the cc.hi.300.bin data asset under /data."
+    echo "Falling back to --toy (throwaway vectors trained on the input; testing only)."
+    { echo "[no model: --toy fallback]"; "$PYTHON" demo.py --toy --no-pos; } 2>&1 \
+        | tee "$RESULTS_DIR/demo_summary.txt"
+fi
+echo
+
+# ---- [3/3] evaluation on the bundled sample -------------------------------
+echo "== [3/3] evaluate_xlsum on bundled sample (baselines, 3 sentences) =="
+if [ -n "$MODEL_PATH" ] && [ -f "$MODEL_PATH" ]; then
+    if "$PYTHON" evaluate_xlsum.py --model "$MODEL_PATH" --data "$SAMPLE_DATA" \
+            --baselines --settings 3 --no-pos --limit 10 \
+            2> "$RESULTS_DIR/evaluate_sample.err" \
+            | tee "$RESULTS_DIR/evaluate_sample.md"; then
+        echo "evaluation: OK"
+    else
+        echo "evaluation: FAILED (see $RESULTS_DIR/evaluate_sample.err)"
+        status=1
+    fi
+else
+    echo "MODEL_PATH not found — skipping evaluation (it needs the embedding model)." \
+        | tee "$RESULTS_DIR/evaluate_sample.md"
+    status=1
+fi
+echo
+
+echo "=========================================================="
+echo " Done. Outputs written to $RESULTS_DIR:"
+ls -1 "$RESULTS_DIR" | sed 's/^/   /'
+echo "=========================================================="
+exit $status
