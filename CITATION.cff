@@ -25,9 +25,9 @@ keywords:
   - k-means
   - ROUGE
   - low-resource NLP
-# Placeholders — fill in at release (see RELEASE.md):
 repository-code: "https://github.com/mudasirmohd/HinExSum"
-# doi: 10.5281/zenodo.XXXXXXX   # Zenodo concept DOI, added after archiving
+doi: 10.24433/CO.6462433.v1   # Code Ocean capsule DOI
+# A Zenodo concept DOI may be added as an additional identifier (see RELEASE.md).
 references:
   - type: article
     title: "Text document summarization using word embedding"
